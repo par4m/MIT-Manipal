@@ -9,55 +9,73 @@ struct Node {
 
 struct Node *head;
 
-void InsertAtHead(int data) {
-  struct Node *temp = malloc(sizeof(struct Node));
-  temp->data = data;
-  temp->next = NULL;
-  temp->prev = NULL;
-  if (head == NULL) {
-    head = temp;
-    return;
-  }
-  head->prev = temp; // point prev of current head to newNode
-  temp->next = head; // point next of newNode to head
-  head = temp;
-}
-
 void InsertEnd(int data) {
   struct Node *temp = malloc(sizeof(struct Node));
   struct Node *temp1 = head;
   temp->data = data;
   temp->next = NULL;
   temp->prev = NULL;
+  if (head == NULL) {
+    head = temp;
+    head->next = head;
+    head->prev = head;
+    return;
+  }
+
   // go to last, point prev of new to it
-  while (temp1->next != NULL) {
+  while (temp1->next != head) {
     temp1 = temp1->next;
   }
-  temp->prev = temp1;
   temp1->next = temp;
+  temp->prev = temp1;
+  temp->next = head;
+  head->prev = temp;
+}
+
+void InsertAtHead(int data) {
+  struct Node *temp = malloc(sizeof(struct Node));
+  struct Node *temp1 = head;
+  temp->data = data;
+  temp->next = NULL;
+  temp->prev = NULL;
+  if (head == NULL) {
+    head = temp;
+    head->next = head;
+    head->prev = head;
+    return;
+  }
+
+  // go to last, point prev of new to it
+  while (temp1->next != head) {
+    temp1 = temp1->next;
+  }
+  temp1->next = temp;
+  temp->prev = temp1;
+  temp->next = head;
+  head->prev = temp;
+
+  head = temp;
 }
 
 void display() {
   struct Node *temp = head;
-  while (temp != NULL) {
+  printf("%d", temp->data);
+  temp = temp->next;
+  while (temp != head) {
     printf("%d", temp->data);
     temp = temp->next;
   }
   printf("\n");
 }
 
-void ReversePrint() {
-  printf("Printing in Reverse\n");
+void displayRev() {
   struct Node *temp = head;
-  // go to last element
-  while (temp->next != NULL) {
-    temp = temp->next;
-  }
-  // print in reverse
-  while (temp != NULL) {
+  temp = temp->prev;
+  while (temp != head) {
     printf("%d", temp->data);
     temp = temp->prev;
   }
+  printf("%d", head->data);
   printf("\n");
 }
 
@@ -86,17 +104,15 @@ void InsertN(int n, int data) {
   }
 }
 
-void deleteFront() {
-  head = head->next;
-  head->prev = NULL;
-}
+void deleteFront() { head = head->next; }
 
 void deleteEnd() {
   struct Node *temp = head;
-  while (temp->next->next != NULL) {
+  while (temp->next->next != head) {
     temp = temp->next;
   }
-  temp->next = NULL;
+  temp->next = head;
+  head->prev = temp;
 }
 
 void deleteN(int n) {
@@ -125,26 +141,16 @@ void deleteN(int n) {
 
 int main(int argc, char *argv[]) {
   head = NULL;
-  InsertAtHead(1);
-  display();
-  InsertAtHead(2);
+  InsertEnd(1);
+  InsertEnd(2);
   display();
   InsertAtHead(3);
   display();
-  ReversePrint();
-  InsertEnd(4);
-  display();
-  ReversePrint();
-  InsertN(1, 4);
-  display();
-  InsertN(3, 3);
-  display();
-  deleteN(2);
+  displayRev();
+  InsertN(2, 4);
   display();
   deleteFront();
   display();
-  deleteEnd();
-  display();
-
+  displayRev();
   return 0;
 }

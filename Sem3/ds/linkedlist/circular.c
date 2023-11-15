@@ -73,7 +73,25 @@ void deleteEnd() {
   temp->link = head;
 }
 
-void deleteN(int n) {}
+void deleteN(int n) {
+  struct Node *temp1 = head;
+  struct Node *temp2 = head;
+  if (n == 1) {
+    deleteFront();
+  }
+  for (int i = 0; i < n - 2; i++) {
+    temp1 = temp1->link;
+  }
+  for (int i = 0; i < n - 1; i++) {
+
+    temp2 = temp2->link;
+  }
+  if (temp2->link == head) {
+    deleteEnd();
+  } else {
+    temp1->link = temp2->link;
+  }
+}
 
 void display() {
   struct Node *temp = head;
@@ -100,6 +118,8 @@ int main(int argc, char *argv[]) {
   deleteFront();
   display();
   deleteEnd();
+  display();
+  deleteN(2);
   display();
 
   return 0;
