@@ -39,7 +39,7 @@ void addToFront(struct DQ *deque, int x) {
     deque->front = 0;
     deque->rear = 0;
   } else {
-    deque->front = (deque->front + 1) % MAX_SIZE;
+    deque->front = (deque->front - 1 + MAX_SIZE) % MAX_SIZE;
   }
   deque->arr[deque->front] = x;
 }
